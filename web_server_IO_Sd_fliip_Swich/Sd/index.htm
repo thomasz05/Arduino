@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Arduino LEd</title>
+        <script>
+		strLED1 = "";
+		strLED2 = "";
+		strLED3 = "";
+		strLED4 = "";
+		strLED5 = "";
+		strLED6 = "";
+		function GetArduinoIO()
+		{
+			nocache = "&nocache=" + Math.random() * 1000000;
+			var request = new XMLHttpRequest();
+			request.onreadystatechange = function()
+			{
+				if (this.readyState == 4) {
+					if (this.status == 200) {
+						if (this.responseXML != null) {
+							// XML file received - contains analog values, switch values and LED states
+							var count;
+							// get switch inputs
+							var num_an = this.responseXML.getElementsByTagName('switch').length;
+							for (count = 0; count < num_an; count++) {
+								document.getElementsByClassName("switches")[count].innerHTML =
+									this.responseXML.getElementsByTagName('switch')[count].childNodes[0].nodeValue;
+							}
+							// LED 1
+							if (this.responseXML.getElementsByTagName('LED')[0].childNodes[0].nodeValue === "checked") {
+								document.LED_form.LED1.checked = true;
+							}
+							else {
+								document.LED_form.LED1.checked = false;
+							}
+							// LED 2
+							if (this.responseXML.getElementsByTagName('LED')[1].childNodes[0].nodeValue === "checked") {
+								document.LED_form.LED2.checked = true;
+							}
+							else {
+								document.LED_form.LED2.checked = false;
+							}
+                            // LED 3
+							if (this.responseXML.getElementsByTagName('LED')[2].childNodes[0].nodeValue === "checked") {
+								document.LED_form.LED3.checked = true;
+							}
+							else {
+								document.LED_form.LED3.checked = false;
+							}
+                            // LED 4
+							if (this.responseXML.getElementsByTagName('LED')[3].childNodes[0].nodeValue === "checked") {
+								document.LED_form.LED4.checked = true;
+							}
+							else {
+								document.LED_form.LED4.checked = false;
+							}
+                            // LED 5
+							if (this.responseXML.getElementsByTagName('LED')[4].childNodes[0].nodeValue === "checked") {
+								document.LED_form.LED5.checked = true;
+							}
+							else {
+								document.LED_form.LED5.checked = false;
+							}
+                            // LED 6
+							if (this.responseXML.getElementsByTagName('LED')[5].childNodes[0].nodeValue === "checked") {
+								document.LED_form.LED6.checked = true;
+							}
+							else {
+								document.LED_form.LED6.checked = false;
+							}
+						}
+					}
+				}
+			}
+			// send HTTP GET request with LEDs to switch on/off if any
+			request.open("GET", "ajax_inputs" + strLED1 + strLED2 + strLED3 + strLED4 + strLED5 + strLED6 + nocache, true);
+			request.send(null);
+			setTimeout('GetArduinoIO()', 1000);
+			strLED1 = "";
+			strLED2 = "";
+			strLED3 = "";
+			strLED4 = "";
+			strLED5 = "";
+			strLED6 = "";
+		}
+		// service LEDs when checkbox checked/unchecked
+		function GetCheck()
+		{
+			if (LED_form.LED1.checked) {
+				strLED1 = "&LED1=1";
+			}
+			else {
+				strLED1 = "&LED1=0";
+			}
+			if (LED_form.LED2.checked) {
+				strLED2 = "&LED2=1";
+			}
+			else {
+				strLED2 = "&LED2=0";
+			}
+			if (LED_form.LED3.checked) {
+				strLED3 = "&LED3=1";
+			}
+			else {
+				strLED3 = "&LED3=0";
+			}
+            if (LED_form.LED4.checked) {
+				strLED4 = "&LED4=1";
+			}
+			else {
+				strLED4 = "&LED4=0";
+			}
+            if (LED_form.LED5.checked) {
+				strLED5 = "&LED5=1";
+			}
+			else {
+				strLED5 = "&LED5=0";
+			}
+            if (LED_form.LED6.checked) {
+				strLED6 = "&LED6=1";
+			}
+			else {
+				strLED6 = "&LED6=0";
+			}
+		}
+	</script>
+	<style>
+		.IO_box {
+			float: left;
+			margin: 0 20px 20px 0;
+			border: 1px solid blue;
+			padding: 0 5px 0 5px;
+			width: 120px;
+            text-align: center;
+		}
+		h1 {
+			font-size: 120%;
+			color: blue;
+			margin: 0 0 10px 0;
+		}
+		h2 {
+			font-size: 85%;
+			color: #5734E6;
+			margin: 5px 0 5px 0;
+            text-align: center;
+		}
+		p, form, button {
+			font-size: 80%;
+			color: #252525;
+		}
+		.small_text {
+			font-size: 70%;
+			color: #737373;
+		}
+
+
+		.onoffswitch {
+    		position: relative; width: 90px;
+   			-webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+		}
+		.onoffswitch-checkbox {
+   			position: absolute;
+  			opacity: 0;
+			pointer-events: none;
+		}
+		.onoffswitch-label {
+    		display: block; overflow: hidden; cursor: pointer;
+  		    border: 2px solid #999999; border-radius: 20px;
+		}
+		.onoffswitch-inner {
+  			display: block; width: 200%; margin-left: -100%;
+    		transition: margin 0.3s ease-in 0s;
+		}
+		.onoffswitch-inner:before, .onoffswitch-inner:after {
+    		display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+    		font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+   			box-sizing: border-box;
+		}
+		.onoffswitch-inner:before {
+   			content: "ON";
+    		padding-left: 10px;
+    		background-color: #34A7C1; color: #FFFFFF;
+		}
+		.onoffswitch-inner:after {
+    		content: "OFF";
+    		padding-right: 10px;
+    		background-color: #EEEEEE; color: #999999;
+    		text-align: right;
+		}
+		.onoffswitch-switch {
+    		display: block; width: 18px; margin: 6px;
+    		background: #FFFFFF;
+    		position: absolute; top: 0; bottom: 0;
+    		right: 56px;
+    		border: 2px solid #999999; border-radius: 20px;
+    		transition: all 0.3s ease-in 0s; 
+		}
+		.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    		margin-left: 0;
+		}
+		.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+   			right: 0px; 
+		}
+
+		
+	</style>
+    </head>
+    <body onload="GetArduinoIO()">
+        <h1>Arduino Ajax I/O</h1>
+		<div class="IO_box">
+			<h2>LEDs Using Checkboxes</h2>
+			<form id="check_LEDs" name="LED_form">
+                LED 1
+                <br/>
+                <div class="onoffswitch">
+                    <input type="checkbox" name="LED1" value="0" class="onoffswitch-checkbox" id="myonoffswitch1" onclick="GetCheck()">
+                    <label class="onoffswitch-label" for="myonoffswitch1">
+                        <span class="onoffswitch-inner"></span>
+                        <span class="onoffswitch-switch"></span>
+                    </label>
+                </div>
+                <br />
+                LED 2
+                <br/>
+                <div class="onoffswitch">
+                    <input type="checkbox" name="LED2" value="0" class="onoffswitch-checkbox" id="myonoffswitch2" onclick="GetCheck()">
+                    <label class="onoffswitch-label" for="myonoffswitch2">
+                        <span class="onoffswitch-inner"></span>
+                        <span class="onoffswitch-switch"></span>
+                    </label>
+                </div>
+                <br/>
+                LED 3
+                <br/>
+                <div class="onoffswitch">
+                    <input type="checkbox" name="LED3" value="0" class="onoffswitch-checkbox" id="myonoffswitch3" onclick="GetCheck()">
+                    <label class="onoffswitch-label" for="myonoffswitch3">
+                        <span class="onoffswitch-inner"></span>
+                        <span class="onoffswitch-switch"></span>
+                    </label>
+                </div>
+                <br/>
+                LED 4
+                <br/>
+                <div class="onoffswitch">
+                    <input type="checkbox" name="LED4" value="0" class="onoffswitch-checkbox" id="myonoffswitch4" onclick="GetCheck()">
+                    <label class="onoffswitch-label" for="myonoffswitch4">
+                        <span class="onoffswitch-inner"></span>
+                        <span class="onoffswitch-switch"></span>
+                    </label>
+                </div>
+                <br/>
+                LED 5
+                <br/>
+                <div class="onoffswitch">
+                    <input type="checkbox" name="LED5" value="0" class="onoffswitch-checkbox" id="myonoffswitch5" onclick="GetCheck()">
+                    <label class="onoffswitch-label" for="myonoffswitch5">
+                        <span class="onoffswitch-inner"></span>
+                        <span class="onoffswitch-switch"></span>
+                    </label>
+                </div>
+                <br/>
+                LED 6
+                <br/>
+                <div class="onoffswitch">
+                    <input type="checkbox" name="LED6" value="0" class="onoffswitch-checkbox" id="myonoffswitch6" onclick="GetCheck()">
+                    <label class="onoffswitch-label" for="myonoffswitch6">
+                        <span class="onoffswitch-inner"></span>
+                        <span class="onoffswitch-switch"></span>
+                    </label>
+                </div>
+                <br/>
+			</form>
+		</div>
+    </body>
+</html>
