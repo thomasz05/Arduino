@@ -2,6 +2,8 @@
 Questo progetto permette Di controllare 6 pin Digitali di Arduino Uno con una semplice intefccia web HTTP
 
 HTML Client
+
+
 ![Image](https://www.thomas05.tk/Arduino/html.PNG)
 
 
