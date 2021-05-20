@@ -1,4 +1,4 @@
-# ![Image](https://www.thomas05.tk/Arduino/arduino_22429.ico) Progetto Web server con sd e ajax
+# ![Image](https://www.thomas05.tk/images/favicon.ico) Progetto Web server con sd e ajax
 Questo progetto permette Di controllare 6 pin Digitali di Arduino Uno con una semplice intefccia web HTTP
 
 HTML Client
